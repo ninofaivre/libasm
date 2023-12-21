@@ -1,4 +1,4 @@
-#include "ft_libAsm.h"
+#include "libasm.h"
 
 #include <stdio.h>
 #include <assert.h>
@@ -6,8 +6,6 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <unistd.h>
-
-extern int ft_test(char *);
 
 void test_ft_strlen(char *str) {
   assert(ft_strlen(str) == strlen(str));
@@ -63,9 +61,10 @@ void test_ft_strdup(char *str) {
 
 int main(void) {
   /* strlen */
+  test_ft_strlen("");
+  test_ft_strlen("vvvvvvvvvvvvvvvvvvvvveeeeeeeeeeeeeeeeeeeeeeeeeeeerrrrrrrrrrrrrrrrrrrrrrryyyyyyyyyyyyyyyyyyyy llllllllllllllllllllooooooooooooooooooooooooooooonnnnnnnnnnnnnnnnnnnnnngggggggggggggggggggg sssssssssssssttttttttttttttttttttttttrrrrrrrrrrrrrrrrrrrrrrrrrrrrriiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiinnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnngggggggggggggggggggggggggggggggggggg");
   test_ft_strlen("test");
   test_ft_strlen("bonjour\n");
-  test_ft_strlen("");
   test_ft_strlen("test\0test\n\0");
   test_ft_strlen("42");
 
@@ -73,6 +72,16 @@ int main(void) {
   /* strlen */
 
   /* strcpy */
+  {
+    char dst[] = "jkljdfqkljsfdjkqskfdjljqksjfdk";
+    char src[] = "";
+    test_ft_strcpy(dst, src);
+  }
+  {
+    char dst[500] = "";
+    char src[] = "vvvvvvvvvvvvvvvvvvvvveeeeeeeeeeeeeeeeeeeeeeeeeeeerrrrrrrrrrrrrrrrrrrrrrryyyyyyyyyyyyyyyyyyyy llllllllllllllllllllooooooooooooooooooooooooooooonnnnnnnnnnnnnnnnnnnnnngggggggggggggggggggg sssssssssssssttttttttttttttttttttttttrrrrrrrrrrrrrrrrrrrrrrrrrrrrriiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiinnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnngggggggggggggggggggggggggggggggggggg";
+    test_ft_strcpy(dst, src);
+  }
   {
     char dst[] = "helloooooooo";
     char src[] = "hela";
@@ -93,8 +102,10 @@ int main(void) {
   /* strcpy */
 
   /* strcmp */
-  test_ft_strcmp("left", "right");
   test_ft_strcmp("", "");
+  test_ft_strcmp("", "right");
+  test_ft_strcmp("left", "");
+  test_ft_strcmp("left", "right");
   test_ft_strcmp("a\0b", "a\0c");
   test_ft_strcmp("abc", "abcd");
   test_ft_strcmp("testA", "testB");
@@ -156,8 +167,9 @@ int main(void) {
   /* read */
 
   /* strdup */
-  test_ft_strdup("test");
   test_ft_strdup("");
+  test_ft_strdup("vvvvvvvvvvvvvvvvvvvvveeeeeeeeeeeeeeeeeeeeeeeeeeeerrrrrrrrrrrrrrrrrrrrrrryyyyyyyyyyyyyyyyyyyy llllllllllllllllllllooooooooooooooooooooooooooooonnnnnnnnnnnnnnnnnnnnnngggggggggggggggggggg sssssssssssssttttttttttttttttttttttttrrrrrrrrrrrrrrrrrrrrrrrrrrrrriiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiinnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnngggggggggggggggggggggggggggggggggggg");
+  test_ft_strdup("test");
   test_ft_strdup("test\0wrong");
   test_ft_strdup("\0\0\0");
 

@@ -7,7 +7,6 @@ global ft_strcmp
 global ft_write
 global ft_read
 global ft_strdup
-global ft_test
 
 ft_strlen:
   xor rax, rax
@@ -45,26 +44,29 @@ ft_strcmp:
   ret;
 
 writeReadSetErrnoAndRet:
-  cmp rax, 0
-  jnl .next
   neg rax
   mov rbx, rax
   call __errno_location wrt ..plt
   mov [rax], rbx;
   mov eax, -1;
-  .next:
   ret;
 
 ft_write:
   mov rax, 1
   syscall
+  cmp rax, 0
+  jnl .next
   call writeReadSetErrnoAndRet
+  .next:
   ret;
 
 ft_read:
   mov rax, 0
   syscall
+  cmp rax, 0
+  jnl .next
   call writeReadSetErrnoAndRet
+  .next:
   ret;
 
 ft_strdup:
@@ -86,7 +88,3 @@ ft_strdup:
   mov rdi, rax
   call ft_strcpy
   ret;
-
-ft_test:
-  mov eax, -42
-  neg eax
