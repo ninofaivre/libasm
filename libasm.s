@@ -48,7 +48,7 @@ writeReadSetErrnoAndRet:
   mov rbx, rax
   call __errno_location wrt ..plt
   mov [rax], rbx;
-  mov eax, -1;
+  mov rax, -1;
   ret;
 
 ft_write:
