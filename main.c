@@ -59,20 +59,17 @@ void test_ft_strdup(char *str) {
   free(res);
 }
 
-int main(void) {
-  /* strlen */
+void ft_strlen_tests(void) {
   test_ft_strlen("");
   test_ft_strlen("vvvvvvvvvvvvvvvvvvvvveeeeeeeeeeeeeeeeeeeeeeeeeeeerrrrrrrrrrrrrrrrrrrrrrryyyyyyyyyyyyyyyyyyyy llllllllllllllllllllooooooooooooooooooooooooooooonnnnnnnnnnnnnnnnnnnnnngggggggggggggggggggg sssssssssssssttttttttttttttttttttttttrrrrrrrrrrrrrrrrrrrrrrrrrrrrriiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiinnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnngggggggggggggggggggggggggggggggggggg");
   test_ft_strlen("test");
   test_ft_strlen("bonjour\n");
   test_ft_strlen("test\0test\n\0");
   test_ft_strlen("42");
+}
 
-  printf("ft_strlen tests passed !\n");
-  /* strlen */
-
-  /* strcpy */
-  {
+void ft_strcpy_tests(void) {
+	{
     char dst[] = "jkljdfqkljsfdjkqskfdjljqksjfdk";
     char src[] = "";
     test_ft_strcpy(dst, src);
@@ -97,11 +94,9 @@ int main(void) {
     char src[] = "avion";
     test_ft_strcpy(dst, src);
   }
+}
 
-  printf("ft_strcpy tests passed !\n");
-  /* strcpy */
-
-  /* strcmp */
+void ft_strcmp_tests(void) {
   test_ft_strcmp("", "");
   test_ft_strcmp("", "right");
   test_ft_strcmp("left", "");
@@ -112,11 +107,9 @@ int main(void) {
   test_ft_strcmp("testa", "testA");
   test_ft_strcmp("a", "A");
   test_ft_strcmp("a\n", "a\n");
+}
 
-  printf("ft_strcmp tests passed !\n");
-  /* strcmp */
-
-  /* write */
+void ft_write_tests(void) {
   test_ft_write(1, NULL, 2);
   test_ft_write(42, "test", 42);
   test_ft_write(42, "test", 2);
@@ -141,9 +134,9 @@ int main(void) {
   }
 
   test_ft_write(1, "ft_write tests passed !\n", 24);
-  /* write */
+}
 
-  /* read */
+void ft_read_tests(void) {
   test_ft_read(-1, NULL, 42);
   {
     char buff[500];
@@ -162,19 +155,54 @@ int main(void) {
     close(tube[0]);
     close(tube[1]);
   }
+}
 
-  printf("ft_read tests passed !\n");
-  /* read */
-
-  /* strdup */
+void ft_strdup_tests(void) {
   test_ft_strdup("");
   test_ft_strdup("vvvvvvvvvvvvvvvvvvvvveeeeeeeeeeeeeeeeeeeeeeeeeeeerrrrrrrrrrrrrrrrrrrrrrryyyyyyyyyyyyyyyyyyyy llllllllllllllllllllooooooooooooooooooooooooooooonnnnnnnnnnnnnnnnnnnnnngggggggggggggggggggg sssssssssssssttttttttttttttttttttttttrrrrrrrrrrrrrrrrrrrrrrrrrrrrriiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiinnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnngggggggggggggggggggggggggggggggggggg");
   test_ft_strdup("test");
   test_ft_strdup("test\0wrong");
   test_ft_strdup("\0\0\0");
+}
 
+int exec_one_test(char *arg) {
+	if (strcmp(arg, "strlen") == 0)
+		ft_strlen_tests();
+	else if (strcmp(arg, "strcpy") == 0)
+		ft_strcpy_tests();
+	else if (strcmp(arg, "strcmp") == 0)
+		ft_strcmp_tests();
+	else if (strcmp(arg, "write") == 0)
+		ft_write_tests();
+	else if (strcmp(arg, "read") == 0)
+		ft_read_tests();
+	else if (strcmp(arg, "strdup") == 0)
+		ft_strdup_tests();
+	else {
+		fprintf(stderr, "invalid arg : %s\n", arg);
+		return 1;
+	}
+	return 0;
+}
+
+int main(int argc, char **argv) {
+	if (argc > 2) {
+		fprintf(stderr, "wrong number of args\n");
+		return 2;
+	}
+	if (argc > 1 && strcmp(argv[1], "all") != 0)
+		return exec_one_test(argv[1]);
+	ft_strlen_tests();
+	printf("ft_strlen tests passed !\n");
+	ft_strcpy_tests();
+  printf("ft_strcpy tests passed !\n");
+	ft_strcmp_tests();
+  printf("ft_strcmp tests passed !\n");
+	ft_write_tests();
+	ft_read_tests();
+  printf("ft_read tests passed !\n");
+	ft_strdup_tests();
   printf("ft_strdup tests passed !\n");
-  /* strdup */
 
   return 0;
 }
