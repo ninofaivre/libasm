@@ -19,6 +19,7 @@ ft_strlen:
   ret;
 
 ft_strcpy:
+	push rbx
   xor rax, rax
   .start_loop:
     mov bl, [rsi + rax]
@@ -27,27 +28,36 @@ ft_strcpy:
     cmp bl, 0
     jne .start_loop
   mov rax, rdi
+	pop rbx
   ret;
 
 ft_strcmp:
+	push rcx
+	push rbx
   xor rcx, rcx
+	xor eax, eax
+	xor ebx, ebx
   .start_loop:
-    movzx eax, byte [rdi + rcx]
-    movzx ebx, byte [rsi + rcx]
+    mov al, byte [rdi + rcx]
+    mov bl, byte [rsi + rcx]
     sub eax, ebx
-    test eax, eax
+    test al, al
     jne .exit_loop
     inc rcx
     cmp bl, 0
     jne .start_loop
   .exit_loop:
+	pop rbx
+	pop rcx
   ret;
 
 writeReadSetErrnoAndRet:
   neg rax
+	push rbx
   mov rbx, rax
   call __errno_location wrt ..plt
   mov [rax], rbx;
+	pop rbx
   mov rax, -1;
   ret;
 
