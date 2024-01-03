@@ -1,13 +1,13 @@
 NA			=	nasm
 NA_FLAGS	=	-felf64
-FLAGS 		=	-Wall -Werror -Wextra
+CFLAGS 		=	-Wall -Werror -Wextra
 
-SRCS		=	libasm.s
+SRCS		=	srcs/libasm/libasm.s
 OBJS		=	$(SRCS:.s=.o)
 NAME		=	libasm.a
 
 TEST		=	test
-TEST_SRCS	=	main.c
+TEST_SRCS	=	srcs/main.c munit/munit.c
 
 %.o:			%.s
 				$(NA) $(NA_FLAGS) $<
@@ -18,7 +18,7 @@ $(NAME):		$(OBJS)
 				ar rcs $(NAME) $(OBJS)
 
 $(TEST):		$(NAME) $(TEST_SRCS)
-				gcc $(FLAGS) -o $(TEST) $(TEST_SRCS) -L. -lasm
+				gcc $(CFLAGS) -o $(TEST) $(TEST_SRCS) -L. -lasm
 
 clean:
 				rm -rf $(OBJS)
