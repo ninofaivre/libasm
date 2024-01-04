@@ -32,7 +32,6 @@ ft_strcpy:
   ret;
 
 ft_strcmp:
-	push rcx
 	push rbx
   xor rcx, rcx
 	xor eax, eax
@@ -48,7 +47,6 @@ ft_strcmp:
     jne .start_loop
   .exit_loop:
 	pop rbx
-	pop rcx
   ret;
 
 writeReadSetErrnoAndRet:
