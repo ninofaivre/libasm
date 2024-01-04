@@ -133,7 +133,7 @@ static MunitResult ft_strlen_test(const MunitParameter params[], void *fixture) 
 	return MUNIT_OK;
 }
 
-static MunitResult ft_strcmp_test(const MunitParameter params[], void *fixture) {
+static MunitResult ft_strcmp_test_generic(const MunitParameter params[], void *fixture) {
 	(void)fixture;
 
 	char *left = ((char **)params)[0];
@@ -144,6 +144,50 @@ static MunitResult ft_strcmp_test(const MunitParameter params[], void *fixture) 
 	int res = strcmp(left, right);
 	res = (res < 0) ? -1 : (res > 0) ? 1 : 0;
 	munit_assert_int(ft_res, ==, res);
+	return MUNIT_OK;
+}
+
+static MunitResult ft_func_wrapper_test_register(const MunitParameter params[], void *fixture) {
+	(void)params;
+
+	munit_logf(MUNIT_LOG_INFO, "%s\n", "If an assertion fail, it means you are not restoring (push/pop) some callee-saved registers.");
+
+	void (*ft_func_wrapper)(void) = fixture;
+	int rbx, r12, r13, r14, r15;
+
+	asm("pushq %rbx;"
+			"pushq %r12;"
+			"pushq %r13;"
+			"pushq %r14;"
+			"pushq %r15;");
+	asm("mov $42, %rbx;"
+			"mov $42, %r12;"
+			"mov $42, %r13;"
+			"mov $42, %r14;"
+			"mov $42, %r15;");
+	ft_func_wrapper();
+	asm("movl %%ebx, %0;"
+			"movl %%r12d, %1;"
+			"movl %%r13d, %2;"
+			"movl %%r14d, %3;"
+			"movl %%r15d, %4;"
+			: "=r" (rbx),
+				"=r" (r12),
+				"=r" (r13),
+				"=r" (r14),
+				"=r" (r15));
+	asm("popq %r15;"
+			"popq %r14;"
+			"popq %r13;"
+			"popq %r12;"
+			"popq %rbx;");
+
+	munit_assert_int(rbx, ==, 42);
+	munit_assert_int(r12, ==, 42);
+	munit_assert_int(r13, ==, 42);
+	munit_assert_int(r14, ==, 42);
+	munit_assert_int(r15, ==, 42);
+
 	return MUNIT_OK;
 }
 
@@ -195,6 +239,14 @@ static MunitParameterEnum two_str_test_params[] = {
 	{ NULL, NULL }
 };
 
+static void strcmp_func_wrapper(void) {
+	ft_strcmp("testA", "testB");
+}
+
+static void *ft_strcmp_test_register_setup() {
+	return &strcmp_func_wrapper;
+}
+
 MunitTest tests[] = {
 	{
 		"/ft_strlen",
@@ -204,12 +256,19 @@ MunitTest tests[] = {
 		MUNIT_TEST_OPTION_NONE,
 		one_str_test_params
 	}, {
-		"/ft_strcmp",
-		ft_strcmp_test,
+		"/ft_strcmp/generic",
+		ft_strcmp_test_generic,
 		NULL,
 		NULL,
 		MUNIT_TEST_OPTION_NONE,
 		two_str_test_params
+	}, {
+		"/ft_strcmp/register",
+		ft_func_wrapper_test_register,
+		ft_strcmp_test_register_setup,
+		NULL,
+		MUNIT_TEST_OPTION_NONE,
+		NULL
 	}, {
 		"/ft_strdup",
 		ft_strdup_test,
