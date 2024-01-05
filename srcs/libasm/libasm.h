@@ -1,5 +1,6 @@
 #pragma once
-# include <stddef.h>
+
+#include <stddef.h>
 
 extern size_t ft_strlen(char *str);
 extern int ft_strcmp(char *left, char *right);
