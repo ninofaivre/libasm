@@ -11,6 +11,7 @@ TEST_SRCS	=	srcs/main.c munit/munit.c srcs/tests/tests.c \
 						srcs/tests/mandatory/ft_strlen.c \
 						srcs/tests/mandatory/ft_strcmp.c \
 						srcs/tests/mandatory/ft_strdup.c \
+						srcs/tests/mandatory/ft_strcpy.c \
 
 %.o:			%.s
 				$(NA) $(NA_FLAGS) $<

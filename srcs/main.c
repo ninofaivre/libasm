@@ -111,6 +111,7 @@ int main(int argc, char **argv) {
 		ft_strlen_test_suite,
 		ft_strcmp_test_suite,
 		ft_strdup_test_suite,
+		ft_strcpy_test_suite,
 		{ NULL, NULL, NULL, 0, MUNIT_SUITE_OPTION_NONE }
 	};
 
