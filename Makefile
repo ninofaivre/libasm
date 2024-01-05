@@ -18,7 +18,7 @@ $(NAME):		$(OBJS)
 				ar rcs $(NAME) $(OBJS)
 
 $(TEST):		$(NAME) $(TEST_SRCS)
-				gcc $(CFLAGS) -o $(TEST) $(TEST_SRCS) -L. -lasm
+				gcc $(CFLAGS) -o $(TEST) $(TEST_SRCS) -L. -lasm -I./munit
 
 clean:
 				rm -rf $(OBJS)
@@ -27,5 +27,11 @@ fclean:			clean
 				rm -rf $(NAME) $(TEST)
 
 re:				fclean $(NAME)
+
+# exec this rule every time makefile has changed
+# and you want to generate compile_commands.json
+# (config build for clangd lsp)
+bear:			fclean
+	bear -- make test
 
 .PHONY:			clean fclean re
