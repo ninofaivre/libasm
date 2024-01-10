@@ -1,20 +1,18 @@
-# $ rules
 NAME = libasm.a
 TEST = test
 BEAR = compile_commands.json
 
-# builder and build flags
 NA = nasm
 NA_FLAGS = -felf64
 
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra
+CINCLUDE_DIR = munit srcs/tests srcs/libasm
+CINCLUDES = $(addprefix -I./, $(CINCLUDE_DIR))
 
-# srcs
 SRCS = srcs/libasm/libasm.s
 OBJS = $(SRCS:.s=.o)
 
-# test srcs
 TEST_SRCS	=	srcs/main.c munit/munit.c srcs/tests/tests.c \
 						srcs/tests/mandatory/ft_strlen.c \
 						srcs/tests/mandatory/ft_strcmp.c \
@@ -25,7 +23,7 @@ TEST_OBJS = $(TEST_SRCS:.c=.o)
 all: $(NAME)
 
 $(TEST_OBJS): %.o: %.c
-	$(CC) $(CFLAGS) -c $< -I./munit -I./srcs/tests -I./srcs/libasm -o $@
+	$(CC) $(CFLAGS) -c $< $(CINCLUDES) -o $@
 
 $(OBJS): %.o: %.s
 	$(NA) $(NA_FLAGS) $<
