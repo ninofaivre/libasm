@@ -1,39 +1,48 @@
-NA			=	nasm
-NA_FLAGS	=	-felf64
-CFLAGS 		=	-Wall -Werror -Wextra
+# $ rules
+NAME = libasm.a
+TEST = test
+BEAR = compile_commands.json
 
-SRCS		=	srcs/libasm/libasm.s
-OBJS		=	$(SRCS:.s=.o)
-NAME		=	libasm.a
+# builder and build flags
+NA = nasm
+NA_FLAGS = -felf64
 
-TEST		=	test
+CC = gcc
+CFLAGS = -Wall -Werror -Wextra
+
+# srcs
+SRCS = srcs/libasm/libasm.s
+OBJS = $(SRCS:.s=.o)
+
+# test srcs
 TEST_SRCS	=	srcs/main.c munit/munit.c srcs/tests/tests.c \
 						srcs/tests/mandatory/ft_strlen.c \
 						srcs/tests/mandatory/ft_strcmp.c \
 						srcs/tests/mandatory/ft_strdup.c \
 						srcs/tests/mandatory/ft_strcpy.c
+TEST_OBJS = $(TEST_SRCS:.c=.o)
 
-BEAR = compile_commands.json
+all: $(NAME)
 
-%.o:			%.s
-				$(NA) $(NA_FLAGS) $<
+$(TEST_OBJS): %.o: %.c
+	$(CC) $(CFLAGS) -c $< -I./munit -I./srcs/tests -I./srcs/libasm -o $@
 
-all:			$(NAME)
+$(OBJS): %.o: %.s
+	$(NA) $(NA_FLAGS) $<
 
-$(NAME):		$(OBJS)
-				ar rcs $(NAME) $(OBJS)
+$(NAME): $(OBJS)
+	ar rcs $(NAME) $(OBJS)
 
-# need to %.o %.c
-$(TEST):		$(NAME) $(TEST_SRCS)
-				gcc $(CFLAGS) -o $(TEST) $(TEST_SRCS) -L. -lasm -I./munit -I./srcs/tests -I./srcs/libasm
+$(TEST): $(NAME) $(TEST_OBJS)
+	gcc $(TEST_OBJS) $(CFLAGS) -L. -lasm -o $(TEST)
 
 clean:
-				rm -rf $(OBJS)
+	rm -rf $(OBJS) $(TEST_OBJS)
 
-fclean:			clean
-				rm -rf $(NAME) $(TEST)
+fclean: clean
+	rm -rf $(NAME) $(TEST)
 
-re:				fclean $(NAME)
+re: fclean $(NAME)
 
 # exec this rule every time makefile has changed
 # and you want to generate compile_commands.json
@@ -44,4 +53,4 @@ $(BEAR): Makefile
 	make fclean
 	bear -- make test
 
-.PHONY:			clean fclean re
+.PHONY: clean fclean re
