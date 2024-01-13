@@ -48,7 +48,6 @@ re: fclean $(NAME)
 bear: $(BEAR)
 
 $(BEAR): Makefile
-	make fclean
-	bear -- make test
+	bear -- make test -B
 
 .PHONY: clean fclean re
